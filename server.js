@@ -4,26 +4,23 @@ const Datastore = require('nedb-promises');
 const app = express();
 const db = Datastore.create('data.db');
 
-app.use(express.json());
 app.use(express.static('public'));
 
-app.post('/insert', async (req, res) => {
+app.get('/insert', async (req, res) => {
   try {
-    const doc = await db.insert(req.body);
+    const doc = await db.insert(JSON.parse(req.query.doc));
     res.json(doc);
-  } 
-  catch (err) {
-    res.json({ error: err.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/search', async (req, res) => {
+app.get('/search', async (req, res) => {
   try {
-    const docs = await db.find(req.body);
+    const docs = await db.find(JSON.parse(req.query.doc));
     res.json(docs);
-  } 
-  catch (err) {
-    res.json({ error: err.message });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

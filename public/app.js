@@ -1,27 +1,23 @@
 async function insertDoc() {
+  const val = document.getElementById('insertInput').value;
   try {
-    const res = await fetch('/insert', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: document.getElementById('insertInput').value
-    });
-    document.getElementById('results').textContent = JSON.stringify(await res.json());
-  } 
-  catch (err) {
-    document.getElementById('results').textContent = 'Error Occured While Inserting Data ' + err.message;
+    JSON.parse(val);
+  } catch (err) {
+    document.getElementById('results').textContent = 'Error: ' + err.message;
+    return;
   }
+  const res = await fetch('/insert?doc=' + encodeURIComponent(val));
+  document.getElementById('results').textContent = JSON.stringify(await res.json(), null, 2);
 }
 
 async function searchDocs() {
+  const val = document.getElementById('searchInput').value;
   try {
-    const res = await fetch('/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: document.getElementById('searchInput').value
-    });
-    document.getElementById('results').textContent = JSON.stringify(await res.json());
-  } 
-  catch (err) {
-    document.getElementById('results').textContent = 'Error occured while searching data: ' + err.message;
+    JSON.parse(val);
+  } catch (err) {
+    document.getElementById('results').textContent = 'Error: ' + err.message;
+    return;
   }
+  const res = await fetch('/search?doc=' + encodeURIComponent(val));
+  document.getElementById('results').textContent = JSON.stringify(await res.json(), null, 2);
 }
